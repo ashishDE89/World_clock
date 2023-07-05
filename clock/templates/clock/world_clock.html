@@ -1,0 +1,90 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome to my World Clock</title>
+    <style>
+        body {
+            background-color: #FFBF00;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .clock-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .clock-card {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            padding: 20px;
+            width: 300px;
+        }
+
+        .clock-card h2 {
+            color: #333;
+            margin-top: 0;
+        }
+
+        .clock-card img {
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>World Clock</h1>
+    <div class="clock-container">
+        {% for clock in clocks %}
+    <div class="clock-card">
+        <h2>{{ clock.city }}</h2>
+        <p>{{ clock.time }}</p>
+        {% if clock.city == 'New York' %}
+            <img src="{% static 'clock/new_york.jpg' %}" alt="New York">
+        {% elif clock.city == 'London' %}
+            <img src="{% static 'clock/london.jpg' %}" alt="London">
+        {% elif clock.city == 'India' %}
+            <img src="{% static 'clock/india.jpg' %}" alt="India">
+        {% endif %}
+    </div>
+{% endfor %}
+    </div>
+    <script>
+        function updateClockHands() {
+            const clockCards = document.getElementsByClassName('clock-card');
+            for (let i = 0; i < clockCards.length; i++) {
+                const clockCard = clockCards[i];
+                const hourHand = clockCard.querySelector('.hour-hand');
+                const minuteHand = clockCard.querySelector('.minute-hand');
+                const secondHand = clockCard.querySelector('.second-hand');
+    
+                const date = new Date();
+                const hours = date.getHours();
+                const minutes = date.getMinutes();
+                const seconds = date.getSeconds();
+    
+                const hourRotation = (hours % 12) * 30 + (minutes / 2);
+                const minuteRotation = minutes * 6;
+                const secondRotation = seconds * 6;
+    
+                hourHand.style.transform = `rotate(${hourRotation}deg)`;
+                minuteHand.style.transform = `rotate(${minuteRotation}deg)`;
+                secondHand.style.transform = `rotate(${secondRotation}deg)`;
+            }
+        }
+    
+        setInterval(updateClockHands, 1000);
+    </script>    
+</body>
+</html>
